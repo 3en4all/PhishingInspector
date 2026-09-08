@@ -12,7 +12,13 @@ The current public release is **v0.2.0-beta** for **Windows x64**.
 
 **Latest release:** [Phishing Inspector v0.2.0-beta](https://github.com/3en4all/PhishingInspector/releases/tag/v0.2.0-beta)
 
-**Windows x64 package:** [PhishingInspector-0.2.0-beta-windows-x64.zip](https://github.com/3en4all/PhishingInspector/releases/download/v0.2.0-beta/PhishingInspector-0.2.0-beta-windows-x64.zip)
+### Windows x64 — English
+
+[PhishingInspector-0.2.0-beta-EN-windows-x64.zip](https://github.com/3en4all/PhishingInspector/releases/download/v0.2.0-beta/PhishingInspector-0.2.0-beta-EN-windows-x64.zip)
+
+### Windows x64 — Polish
+
+[PhishingInspector-0.2.0-beta-windows-x64.zip](https://github.com/3en4all/PhishingInspector/releases/download/v0.2.0-beta/PhishingInspector-0.2.0-beta-windows-x64.zip)
 
 No separate Python installation is required.
 
@@ -39,6 +45,7 @@ Because these components are bundled with the application, the current package i
 
 **Version:** `v0.2.0-beta`  
 **Platform:** Windows x64  
+**Languages:** English and Polish  
 **Release stage:** Public beta  
 **Separate Python installation:** Not required
 
