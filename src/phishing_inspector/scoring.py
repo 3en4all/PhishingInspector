@@ -30,6 +30,7 @@ URL_RULE_POINTS = {
     "URL_TEXT_MISMATCH": (30, "Link text shows a different site than the link opens"),
     "URL_BRAND_IMITATION": (30, "Link domain imitates a known brand"),
     "URL_BRAND_SUBDOMAIN": (25, "Link puts a brand name in front of someone else's domain"),
+    "URL_IP_HOST": (20, "Link points to a bare IP address instead of a domain"),
     "URL_SCRIPT_SCHEME": (20, "Link uses a javascript:/data: scheme"),
     "URL_REDIRECT_TO_SUSPICIOUS": (15, "Link redirects to a suspicious address"),
 }

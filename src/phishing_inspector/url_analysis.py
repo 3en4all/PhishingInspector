@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import ipaddress
 import re
 from urllib.parse import parse_qsl, unquote, urlsplit, urlunsplit
 
@@ -99,6 +100,22 @@ def normalize_url(url: str) -> str:
 
 def _hostname_is_ip(hostname: str) -> bool:
     return is_ip(hostname)
+
+
+_LOCAL_NETWORKS = tuple(ipaddress.ip_network(net) for net in (
+    "10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16", "127.0.0.0/8",
+    "169.254.0.0/16", "::1/128", "fc00::/7", "fe80::/10",
+))
+
+
+def _is_private_ip(hostname: str) -> bool:
+    try:
+        address = ipaddress.ip_address(hostname.strip("[]"))
+    except ValueError:
+        return False
+    # RFC 1918 / loopback / link-local only; documentation ranges such as
+    # 203.0.113.0/24 are treated as public.
+    return any(address in network for network in _LOCAL_NETWORKS)
 
 
 def _organizational_domain(hostname: str) -> str:
@@ -271,7 +288,12 @@ def analyze_url(
     trusted_domain = _is_trusted_domain(hostname)
 
     if _hostname_is_ip(hostname):
-        add("URL_IP_HOST", "URL uses an IP address instead of a domain name")
+        if _is_private_ip(hostname):
+            # Printer or router panels in internal mail; phishing pages need a
+            # public address.
+            context.append("URL uses a local network IP address")
+        else:
+            add("URL_IP_HOST", "URL uses an IP address instead of a domain name")
 
     if hostname.startswith("xn--") or ".xn--" in hostname:
         add("URL_PUNYCODE", "URL contains an internationalized Punycode domain")

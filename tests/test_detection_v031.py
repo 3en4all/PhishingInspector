@@ -47,5 +47,19 @@ class BrandSubdomainTests(unittest.TestCase):
         self.assertIn("URL_BRAND_SUBDOMAIN", info.rule_codes)
 
 
+class IpLinkTests(unittest.TestCase):
+    def test_ip_link_scores(self) -> None:
+        from phishing_inspector.scoring import score_analysis_detailed
+
+        info = analyze_url("http://185.12.33.4/office365/login.php")
+        score, verdict, _, findings = score_analysis_detailed(None, [info], [])
+        self.assertIn("URL_IP_HOST", [f.code for f in findings])
+        self.assertEqual(verdict, "SUSPICIOUS")
+
+    def test_local_network_ip_is_context(self) -> None:
+        info = analyze_url("http://192.168.1.50/")
+        self.assertNotIn("URL_IP_HOST", info.rule_codes)
+
+
 if __name__ == "__main__":
     unittest.main()
