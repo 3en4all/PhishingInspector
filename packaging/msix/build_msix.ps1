@@ -2,13 +2,13 @@
 # Usage (from the repository root):
 #   powershell -ExecutionPolicy Bypass -File packaging\msix\build_msix.ps1 [-Test]
 #     [-IdentityName <from Partner Center>] [-Publisher "CN=..."] [-PublisherDisplayName <name>]
-# Without the Partner Center values the package gets test placeholders; it still builds,
-# but only a package built with the real identity can be uploaded to the Store.
+# Defaults are the Partner Center identity of the reserved app (Store ID 9MW1L4JPG8TD).
+# Override them only to build a test package under another identity.
 # -Test registers the built app on this PC (needs Windows "Developer Mode"), so you can start it from the Start menu.
 param(
-    [string]$IdentityName = "3en4all.PhishingInspector",
-    [string]$Publisher = "CN=3en4all-test",
-    [string]$PublisherDisplayName = "3en4all",
+    [string]$IdentityName = "3en4All.PhishingInspector",
+    [string]$Publisher = "CN=2DDDF943-1FAB-494A-9D19-ED6BDCEE268B",
+    [string]$PublisherDisplayName = "3en4All",
     [switch]$Test
 )
 $ErrorActionPreference = "Stop"
