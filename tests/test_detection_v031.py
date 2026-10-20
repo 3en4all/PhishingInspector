@@ -116,5 +116,20 @@ class HackedSitePathTests(unittest.TestCase):
                 self.assertNotIn("URL_HACKED_SITE_PATH", analyze_url(url).rule_codes)
 
 
+class SubjectBrandTests(unittest.TestCase):
+    def test_needs_credentials_lure(self) -> None:
+        from phishing_inspector.content_analysis import analyze_content
+        from phishing_inspector.scoring import score_analysis_detailed
+
+        def codes(text: str) -> list[str]:
+            content = analyze_content("Microsoft 365", text)
+            findings = score_analysis_detailed(None, [], [], content=content,
+                                               subject_brand="Microsoft")[3]
+            return [f.code for f in findings]
+
+        self.assertIn("CONTENT_BRAND_MISMATCH", codes("Your password expires today."))
+        self.assertNotIn("CONTENT_BRAND_MISMATCH", codes("Nowe licencje w ofercie."))
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -40,6 +40,7 @@ FORGED_AUTH_POINTS = 20
 MISSING_AUTH_POINTS = 10
 REPLY_TO_FREEMAIL_POINTS = 10
 QR_LURE_POINTS = 20
+SUBJECT_BRAND_POINTS = 20
 PUNYCODE_SENDER_POINTS = 10
 
 
@@ -85,6 +86,7 @@ def score_analysis_detailed(
     spoofing: Any | None = None,
     received_chain: Any | None = None,
     content: Any | None = None,
+    subject_brand: str | None = None,
 ) -> tuple[int, str, list[str], list[Finding]]:
     findings: list[Finding] = []
     context: list[str] = []
@@ -234,6 +236,11 @@ def score_analysis_detailed(
         hit("CONTENT_LURE", content.points, f"Message text uses phishing pressure: {names}")
 
     categories = set(getattr(content, "categories", None) or ()) if content is not None else set()
+    if subject_brand and "credentials" in categories:
+        hit("CONTENT_BRAND_MISMATCH", SUBJECT_BRAND_POINTS,
+            f"Message about {subject_brand} asks for login details, but neither the "
+            f"sender nor the links belong to {subject_brand}")
+
     if "qr_code" in categories and len(categories) >= 2:
         hit("CONTENT_QR_LURE", QR_LURE_POINTS,
             "Message asks to scan a QR code under pressure (link hidden in an image)")

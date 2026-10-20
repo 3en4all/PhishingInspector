@@ -46,6 +46,8 @@ CATEGORIES: dict[str, tuple[str, ...]] = {
         "confirm your password", "update your account", "sign in to",
         "log in to", "your password expires", "reset your password",
         "card details", "security code", "validate your",
+        "password expires", "password will expire", "keep your current password",
+        "keep current password", "zachowaj obecne haslo", "zachowaj aktualne haslo",
     ),
     "threat": (
         "postepowanie egzekucyjne", "komornik", "policja", "prokuratura",

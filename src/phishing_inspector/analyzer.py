@@ -5,6 +5,7 @@ from pathlib import Path
 
 from .alignment import build_alignment
 from .auth_analysis import parse_authentication_results
+from .brands import brand_in_text, brand_owning
 from .content_analysis import analyze_content
 from .domain_analysis import extract_email_domain
 from .eml_parser import (
@@ -30,6 +31,23 @@ def _dns_checks(from_domain: str | None, return_path_domain: str | None) -> dict
         "spf": check_spf_record(return_path_domain).to_dict() if return_path_domain else None,
         "dmarc": check_dmarc_record(from_domain).to_dict() if from_domain else None,
     }
+
+
+def _subject_brand_elsewhere(subject, from_domain, spoofing, urls) -> str | None:
+    """A brand named in the subject when neither the sender nor any link
+    belongs to it ("Microsoft 365: password expires" linking to workers.dev).
+    The display-name check already covers brands in the sender name."""
+    brand = brand_in_text(str(subject or ""))
+
+    if brand is None or spoofing.claimed_brand or not urls:
+        return None
+    owner = brand_owning(from_domain) if from_domain else None
+    if owner is not None and owner.key == brand.key:
+        return None
+    if any(item.hostname and brand_owning(item.hostname) == brand for item in urls):
+        return None
+
+    return brand.name
 
 
 def analyze_message(path: str | Path, *, network_checks: bool = False) -> EmailAnalysis:
@@ -71,6 +89,8 @@ def analyze_message(path: str | Path, *, network_checks: bool = False) -> EmailA
     attachments = extract_and_analyze_attachments(message)
     content = analyze_content(message.get("Subject"), extract_text(message))
 
+    subject_brand = _subject_brand_elsewhere(message.get("Subject"), from_domain, spoofing, urls)
+
     alignment = build_alignment(
         from_domain=from_domain,
         return_path_domain=return_path_domain,
@@ -90,6 +110,7 @@ def analyze_message(path: str | Path, *, network_checks: bool = False) -> EmailA
         spoofing=spoofing,
         received_chain=received_chain,
         content=content,
+        subject_brand=subject_brand,
     )
 
     limitations: list[str] = []
