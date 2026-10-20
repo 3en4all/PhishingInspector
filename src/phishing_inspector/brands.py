@@ -3,7 +3,9 @@
 Edit this file to add brands. ``domains`` entries match the registrable domain
 and every subdomain; a bare TLD such as ``"google"`` covers brand gTLDs
 (``mail.google``). ``aliases`` are matched as whole words in the sender's
-display name (case and Polish diacritics ignored). ``tokens`` are the names
+display name (case and Polish diacritics ignored; aliases of three letters or
+fewer must be written in capitals, so "ING" matches but the title "Ing." does
+not). ``tokens`` are the names
 looked for inside other domains (``mbank-weryfikacja.com``).
 """
 from __future__ import annotations
@@ -76,7 +78,9 @@ BRANDS: tuple[Brand, ...] = (
     Brand("dhl", "DHL", ("dhl.com", "dhl.pl", "dhl.de", "dhlparcel.pl", "dhl"),
           ("dhl", "dhl express", "dhl parcel"), ("dhl",)),
     # Poland: banks
-    Brand("pko", "PKO Bank Polski", ("pkobp.pl", "pko.pl", "ipko.pl"),
+    Brand("pko", "PKO Bank Polski",
+          ("pkobp.pl", "pko.pl", "ipko.pl", "pkoleasing.pl", "pkotfi.pl",
+           "pkoubezpieczenia.pl", "pkobh.pl", "pkofaktoring.pl"),
           ("pko", "pko bp", "pko bank polski", "ipko"), ("pkobp", "ipko", "pko")),
     Brand("mbank", "mBank", ("mbank.pl", "mbank.cz", "mbank.sk"),
           ("mbank",), ("mbank",)),
@@ -177,10 +181,21 @@ def brand_owning(domain: str | None) -> Brand | None:
 _WORD_CACHE: dict[str, re.Pattern[str]] = {}
 
 
+def _is_short(alias: str) -> bool:
+    return len(_fold(alias)) <= 3
+
+
 def _alias_pattern(alias: str) -> re.Pattern[str]:
     pattern = _WORD_CACHE.get(alias)
     if pattern is None:
-        pattern = re.compile(r"(?<![a-z0-9])" + re.escape(_fold(alias)) + r"(?![a-z0-9])")
+        if _is_short(alias):
+            # Short names collide with ordinary words and titles ("Ing. Jan
+            # Novak", "Pge"); brands write them in capitals.
+            pattern = re.compile(
+                r"(?<![A-Za-z0-9])" + re.escape(_fold(alias).upper()) + r"(?![A-Za-z0-9])"
+            )
+        else:
+            pattern = re.compile(r"(?<![a-z0-9])" + re.escape(_fold(alias)) + r"(?![a-z0-9])")
         _WORD_CACHE[alias] = pattern
     return pattern
 
@@ -191,10 +206,14 @@ def brand_in_text(text: str | None) -> Brand | None:
         return None
 
     folded = _fold(text)
+    upper = unicodedata.normalize("NFKD", text)
+    upper = "".join(ch for ch in upper if not unicodedata.combining(ch)).replace("Ł", "L")
 
     for brand in BRANDS:
-        if any(_alias_pattern(alias).search(folded) for alias in brand.aliases):
-            return brand
+        for alias in brand.aliases:
+            haystack = upper if _is_short(alias) else folded
+            if _alias_pattern(alias).search(haystack):
+                return brand
 
     return None
 
