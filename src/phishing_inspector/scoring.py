@@ -29,6 +29,7 @@ ATTACHMENT_POINTS = {
 URL_RULE_POINTS = {
     "URL_TEXT_MISMATCH": (30, "Link text shows a different site than the link opens"),
     "URL_BRAND_IMITATION": (30, "Link domain imitates a known brand"),
+    "URL_BRAND_SUBDOMAIN": (25, "Link puts a brand name in front of someone else's domain"),
     "URL_SCRIPT_SCHEME": (20, "Link uses a javascript:/data: scheme"),
     "URL_REDIRECT_TO_SUSPICIOUS": (15, "Link redirects to a suspicious address"),
 }
@@ -195,7 +196,7 @@ def score_analysis_detailed(
     for code, (points, message) in URL_RULE_POINTS.items():
         if code in url_codes:
             hit(code, points, message)
-            if code == "URL_BRAND_IMITATION":
+            if code in {"URL_BRAND_IMITATION", "URL_BRAND_SUBDOMAIN"}:
                 impersonation = True
 
     if (

@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import unittest
 
+from phishing_inspector.url_analysis import analyze_url
 from phishing_inspector.brands import brand_in_text, brand_named, brand_owning
 
 
@@ -27,6 +28,23 @@ class BrandNameTests(unittest.TestCase):
         for name in ("Jan Kowalski", "Biuro 365", "IT Helpdesk", "Ola Isabel", "Sklep 24/7"):
             with self.subTest(name):
                 self.assertIsNone(brand_named(name))
+
+
+class BrandSubdomainTests(unittest.TestCase):
+    def test_short_brand_as_subdomain_label(self) -> None:
+        info = analyze_url("https://olx.bezpieczna-transakcja24.pl/odbierz")
+        self.assertIn("URL_BRAND_SUBDOMAIN", info.rule_codes)
+
+    def test_short_brand_inside_word_is_ignored(self) -> None:
+        info = analyze_url("https://polxa.example.com/")
+        self.assertNotIn("URL_BRAND_SUBDOMAIN", info.rule_codes)
+
+    def test_company_webmail_on_own_domain(self) -> None:
+        info = analyze_url("https://outlook.firma.pl/owa/", sender_domain="firma.pl",
+                           sender_authenticated=True)
+        self.assertNotIn("URL_BRAND_SUBDOMAIN", info.rule_codes)
+        info = analyze_url("https://outlook.firma.pl/owa/", sender_domain="firma.pl")
+        self.assertIn("URL_BRAND_SUBDOMAIN", info.rule_codes)
 
 
 if __name__ == "__main__":

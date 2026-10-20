@@ -58,6 +58,13 @@ TRUSTED_ORGANIZATIONAL_DOMAINS = {
 _SUBDOMAIN_BRAND_TOKENS = sorted(
     {token for brand in BRANDS for token in (brand.key, *brand.tokens) if len(token) >= 5}
 )
+# Product names companies use for their own servers (outlook.firma.pl).
+_OWN_SERVICE_WORDS = ("outlook", "office365", "sharepoint", "onedrive")
+# Short names (olx, ing, pko, dpd) only count as a whole subdomain label:
+# olx.bezpieczna-platnosc.pl, but not polx.example.com.
+_SUBDOMAIN_BRAND_LABELS = frozenset(
+    token for brand in BRANDS for token in (brand.key, *brand.tokens) if len(token) >= 3
+)
 
 
 def extract_urls(text: str) -> list[str]:
@@ -122,7 +129,11 @@ def _looks_like_brand_in_subdomain(hostname: str) -> bool:
             return False
         subdomain = ".".join(labels[:-2])
 
-    return any(token in subdomain for token in _SUBDOMAIN_BRAND_TOKENS)
+    if any(token in subdomain for token in _SUBDOMAIN_BRAND_TOKENS):
+        return True
+
+    labels = re.split(r"[.\-_]", subdomain)
+    return any(label in _SUBDOMAIN_BRAND_LABELS for label in labels)
 
 
 def domain_shown_in_text(text: str | None) -> str | None:
@@ -275,7 +286,19 @@ def analyze_url(
         add("URL_LONG_HOST", "Hostname is unusually long")
 
     if _looks_like_brand_in_subdomain(hostname) and not trusted_domain:
-        add("URL_BRAND_SUBDOMAIN", "Hostname contains a brand-like term in a subdomain")
+        own_site = bool(
+            sender_domain
+            and sender_authenticated
+            and registrable_domain(sender_domain) == registrable_domain(hostname)
+            and any(word in subdomain_part(hostname) for word in _OWN_SERVICE_WORDS)
+        )
+        if own_site:
+            # outlook.firma.pl linked from an authenticated firma.pl sender is
+            # the company's own webmail, not an imitation. Bank and shop names
+            # (olx.platnosc24.pl) are flagged even on the sender's own domain.
+            context.append("Hostname contains a brand-like term on the sender's own domain")
+        else:
+            add("URL_BRAND_SUBDOMAIN", "Hostname contains a brand-like term in a subdomain")
 
     if not _hostname_is_ip(hostname):
         imitation = imitated_brand(hostname)
