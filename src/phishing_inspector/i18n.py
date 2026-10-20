@@ -87,6 +87,38 @@ TEXTS: dict[str, dict[str, str]] = {
         "limitations": "Ograniczenia analizy:",
         "buycoffee_tip": "Jeśli Phishing Inspector Ci się przydaje, możesz wesprzeć rozwój projektu.",
         "buycoffee_asset": "buycoffee-button-primary.png",
+        "menu_help": "Pomoc",
+        "menu_about": "O programie",
+        "about_window_title": "PhishingInspector — O programie",
+        "about_badges": "Bezpłatny  •  v{version}  •  Windows",
+        "about_tagline": "Analiza podejrzanych wiadomości e-mail",
+        "about_description": (
+            "Bezpłatne narzędzie od 3en4All do sprawdzania plików .eml i .msg. "
+            "Ocenia linki, nadawcę, załączniki i treść wiadomości, wyjaśnia "
+            "wykryte sygnały phishingu i pozwala zapisać raport. Analiza działa "
+            "lokalnie; połączenie z siecią następuje tylko po włączeniu opcji "
+            "sprawdzania DNS."
+        ),
+        "about_project_title": "Projekt i dokumentacja",
+        "about_link_site": "Oficjalna strona",
+        "about_link_ecosystem": "Ekosystem 3EN4ALL",
+        "about_link_github": "GitHub — kod i zgłoszenia",
+        "about_link_privacy": "Polityka prywatności",
+        "about_community_title": "Społeczność 3EN4ALL",
+        "about_link_facebook": "Facebook",
+        "about_support_title": "Wesprzyj rozwój",
+        "about_support_text": (
+            "Program jest i pozostanie bezpłatny. Jeśli chcesz, możesz "
+            "dobrowolnie wesprzeć rozwój projektów 3EN4ALL."
+        ),
+        "about_support_link": "Postaw kawę (buycoffee.to)",
+        "about_disclaimer": (
+            "Narzędzie wspomaga ocenę ryzyka, ale nie gwarantuje wykrycia "
+            "wszystkich zagrożeń. W razie wątpliwości nie klikaj linków i nie "
+            "otwieraj załączników."
+        ),
+        "about_footer": "© 2026 3en4All  •  Rdzeń programu: licencja MIT",
+        "about_close": "Zamknij",
         "rating_title": "Oceń Phishing Inspector",
         "rating_question": "Jak oceniasz Phishing Inspector?",
         "rating_info": "Kliknij liczbę gwiazdek. Wysyłana jest tylko ocena 1–5, bez danych z analizowanych wiadomości.",
@@ -218,6 +250,38 @@ TEXTS: dict[str, dict[str, str]] = {
         "limitations": "Analysis limitations:",
         "buycoffee_tip": "If Phishing Inspector is useful to you, you can support further development.",
         "buycoffee_asset": "buycoffee-button-primary-en.png",
+        "menu_help": "Help",
+        "menu_about": "About",
+        "about_window_title": "About PhishingInspector",
+        "about_badges": "Free  •  v{version}  •  Windows",
+        "about_tagline": "Analysis of suspicious e-mail messages",
+        "about_description": (
+            "A free tool by 3en4All for checking .eml and .msg files. It "
+            "examines links, the sender, attachments and message content, "
+            "explains the phishing signals it finds and lets you save a report. "
+            "Analysis runs locally; the network is used only when you turn on "
+            "the DNS check option."
+        ),
+        "about_project_title": "Project and documentation",
+        "about_link_site": "Official website",
+        "about_link_ecosystem": "3EN4ALL ecosystem",
+        "about_link_github": "GitHub — code and issues",
+        "about_link_privacy": "Privacy policy",
+        "about_community_title": "3EN4ALL community",
+        "about_link_facebook": "Facebook",
+        "about_support_title": "Support development",
+        "about_support_text": (
+            "The program is and will stay free. If you like, you can "
+            "voluntarily support the development of 3EN4ALL projects."
+        ),
+        "about_support_link": "Buy a coffee (buycoffee.to)",
+        "about_disclaimer": (
+            "This tool helps assess risk but does not guarantee that every "
+            "threat is detected. When in doubt, do not click links or open "
+            "attachments."
+        ),
+        "about_footer": "© 2026 3en4All  •  Program core: MIT License",
+        "about_close": "Close",
         "rating_title": "Rate Phishing Inspector",
         "rating_question": "How would you rate Phishing Inspector?",
         "rating_info": "Click the number of stars. Only the 1–5 rating is sent, without any data from analyzed messages.",
