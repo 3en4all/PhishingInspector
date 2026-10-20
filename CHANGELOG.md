@@ -3,6 +3,9 @@
 ## 0.3.1-beta (unreleased)
 
 App
+- New dark interface ("security dashboard"): compact drop zone with the chosen file shown as a chip, strong result card (verdict, risk score, risk bar), equal tiles for SPF/DKIM/DMARC/links/attachments/origin IP, a separate card with the explanation and colour-coded key findings, cleaner tabs, collapsible feedback bar. Layout fits 1366×768 and 1920×1080. Analysis logic unchanged.
+- One brand everywhere: Phishing Inspector / 3EN4ALL ("Powered by TechM8" removed). The Polish UI no longer shows English statuses (verdict, SPF/DKIM/DMARC, true/false); findings lead with the Polish explanation.
+- `tools/store_screenshots.py` renders Store/review screenshots from synthetic messages (PL/EN, 1920×1080 and 1366×768).
 - Help → About window (PL/EN with the app language, version read from the package). Links open only on click; links to GitHub, privacy policy, website, Facebook, YouTube and buycoffee.to; a link without a confirmed address (ecosystem page) stays hidden until filled in `about_dialog.py`.
 
 Licence and distribution

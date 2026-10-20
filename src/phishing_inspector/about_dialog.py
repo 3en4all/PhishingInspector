@@ -17,6 +17,7 @@ from PySide6.QtWidgets import (
 )
 
 from . import __version__
+from .gui_theme import INFO, MUTED
 from .i18n import text
 
 GITHUB_URL = "https://github.com/3en4all/PhishingInspector"
@@ -34,7 +35,7 @@ COMMUNITY_LINKS = (
 )
 SUPPORT_URL = "https://buycoffee.to/3en4all"
 
-ACCENT = "#2e7d32"
+ACCENT = INFO
 
 
 def _links_html(language: str, links) -> str:
@@ -75,20 +76,20 @@ class AboutDialog(QDialog):
         layout.setContentsMargins(24, 20, 24, 16)
         layout.setSpacing(8)
 
-        name = QLabel("PhishingInspector")
+        name = QLabel("Phishing Inspector")
         name.setStyleSheet("font-size: 22px; font-weight: 800;")
         layout.addWidget(name)
 
         badges = QLabel(t("about_badges", version=__version__))
         badges.setStyleSheet(
-            f"color: white; background: {ACCENT}; border-radius: 9px; "
+            f"color: #0b0e13; background: {ACCENT}; border-radius: 9px; "
             "padding: 3px 10px; font-size: 11px; font-weight: 700;"
         )
         badges.setMaximumWidth(badges.sizeHint().width() + 4)
         layout.addWidget(badges)
 
         tagline = QLabel(t("about_tagline"))
-        tagline.setStyleSheet("font-size: 13px; color: #9aa5ad; margin-bottom: 4px;")
+        tagline.setStyleSheet(f"font-size: 13px; color: {MUTED}; margin-bottom: 4px;")
         layout.addWidget(tagline)
 
         description = QLabel(t("about_description"))
@@ -121,10 +122,20 @@ class AboutDialog(QDialog):
         layout.addWidget(line)
 
         footer = QLabel(t("about_footer"))
-        footer.setStyleSheet("font-size: 11px; color: #9aa5ad;")
+        footer.setStyleSheet(f"font-size: 11px; color: {MUTED};")
         layout.addWidget(footer)
 
         buttons = QDialogButtonBox(QDialogButtonBox.Close)
         buttons.button(QDialogButtonBox.Close).setText(t("about_close"))
         buttons.rejected.connect(self.reject)
         layout.addWidget(buttons)
+
+    def showEvent(self, event) -> None:
+        # Wrapped labels get their final font from the parent's style sheet
+        # only when polished; size the dialog after that so no text is cut.
+        for widget in (self, *self.findChildren(QLabel)):
+            widget.ensurePolished()
+        layout = self.layout()
+        if layout.hasHeightForWidth():
+            self.resize(self.width(), layout.totalHeightForWidth(self.width()))
+        super().showEvent(event)

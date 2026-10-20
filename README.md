@@ -81,6 +81,6 @@ The Phishing Inspector core is released under the [MIT License](LICENSE). Future
 
 ## About
 
-Phishing Inspector is part of the broader **3en4all / TechM8** ecosystem — projects focused on IT infrastructure, Python automation, security tooling and local AI workflows.
+Phishing Inspector is part of the broader **3EN4ALL** ecosystem — projects focused on IT infrastructure, Python automation, security tooling and local AI workflows.
 
-**3en4all / TechM8:** https://3en4all.github.io/
+**3EN4ALL:** https://3en4all.github.io/
