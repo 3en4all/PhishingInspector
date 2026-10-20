@@ -8,6 +8,7 @@ from .auth_analysis import parse_authentication_results
 from .brands import brand_in_text, brand_owning
 from .content_analysis import analyze_content
 from .domain_analysis import extract_email_domain
+from .domains import registrable_domain
 from .eml_parser import (
     extract_and_analyze_attachments,
     extract_and_analyze_urls,
@@ -33,7 +34,9 @@ def _dns_checks(from_domain: str | None, return_path_domain: str | None) -> dict
     }
 
 
-def _subject_brand_elsewhere(subject, from_domain, spoofing, urls) -> str | None:
+def _subject_brand_elsewhere(
+    subject, from_domain, spoofing, urls, sender_authenticated: bool
+) -> str | None:
     """A brand named in the subject when neither the sender nor any link
     belongs to it ("Microsoft 365: password expires" linking to workers.dev).
     The display-name check already covers brands in the sender name."""
@@ -45,6 +48,12 @@ def _subject_brand_elsewhere(subject, from_domain, spoofing, urls) -> str | None
     if owner is not None and owner.key == brand.key:
         return None
     if any(item.hostname and brand_owning(item.hostname) == brand for item in urls):
+        return None
+    if sender_authenticated and from_domain and all(
+        item.hostname and registrable_domain(item.hostname) == registrable_domain(from_domain)
+        for item in urls
+    ):
+        # A reseller writing about Microsoft 365 and linking to its own panel.
         return None
 
     return brand.name
@@ -89,7 +98,9 @@ def analyze_message(path: str | Path, *, network_checks: bool = False) -> EmailA
     attachments = extract_and_analyze_attachments(message)
     content = analyze_content(message.get("Subject"), extract_text(message))
 
-    subject_brand = _subject_brand_elsewhere(message.get("Subject"), from_domain, spoofing, urls)
+    subject_brand = _subject_brand_elsewhere(
+        message.get("Subject"), from_domain, spoofing, urls, sender_authenticated
+    )
 
     alignment = build_alignment(
         from_domain=from_domain,
