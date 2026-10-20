@@ -39,6 +39,7 @@ BRAND_NAME_SPOOF_POINTS = 40
 FORGED_AUTH_POINTS = 20
 MISSING_AUTH_POINTS = 10
 REPLY_TO_FREEMAIL_POINTS = 10
+QR_LURE_POINTS = 20
 PUNYCODE_SENDER_POINTS = 10
 
 
@@ -231,6 +232,11 @@ def score_analysis_detailed(
     if content is not None and getattr(content, "points", 0):
         names = ", ".join(sorted(content.categories))
         hit("CONTENT_LURE", content.points, f"Message text uses phishing pressure: {names}")
+
+    categories = set(getattr(content, "categories", None) or ()) if content is not None else set()
+    if "qr_code" in categories and len(categories) >= 2:
+        hit("CONTENT_QR_LURE", QR_LURE_POINTS,
+            "Message asks to scan a QR code under pressure (link hidden in an image)")
 
     if received_chain is not None:
         for warning in received_chain.warnings:

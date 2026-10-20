@@ -20,6 +20,9 @@ CATEGORIES: dict[str, tuple[str, ...]] = {
         "final notice", "last warning", "will be suspended", "will be closed",
         "has been suspended", "has been locked", "account will be deleted",
         "action required", "expires today",
+        "zachowac dostep", "utracisz dostep", "stracisz dostep", "utrata dostepu",
+        "nie dzwon", "jestem na spotkaniu", "avoid losing access", "lose access",
+        "keep access",
     ),
     "payment": (
         "doplata", "doplaty", "niedoplata", "oplata celna", "oplac", "zaplac",
@@ -29,6 +32,11 @@ CATEGORIES: dict[str, tuple[str, ...]] = {
         "customs fee", "delivery fee", "outstanding payment", "overdue invoice",
         "payment failed", "update your payment", "refund", "tax refund",
         "unpaid invoice", "pay now",
+        # Business email compromise: a transfer to a new account.
+        "zlec przelew", "zlecic przelew", "pilny przelew", "wykonac przelew",
+        "nowy numer konta", "nowe konto kontrahenta", "zmiana numeru konta",
+        "zmienil sie numer konta", "karty podarunkowe", "wire transfer",
+        "new bank details", "bank details have changed", "gift cards",
     ),
     "credentials": (
         "podaj haslo", "potwierdz dane", "zweryfikuj konto", "zweryfikuj swoje",
@@ -43,6 +51,12 @@ CATEGORIES: dict[str, tuple[str, ...]] = {
         "postepowanie egzekucyjne", "komornik", "policja", "prokuratura",
         "sprawa karna", "kara grzywny", "legal action", "lawsuit",
         "police", "arrest",
+    ),
+    # QR code phishing: the link is in an image so filters cannot see it.
+    "qr_code": (
+        "zeskanuj kod qr", "zeskanuj ponizszy kod", "zeskanuj kod telefonem",
+        "zeskanuj kod qr telefonem", "scan the qr code", "scan this qr code",
+        "scan the code below", "scan the qr", "zeskanuj qr",
     ),
 }
 

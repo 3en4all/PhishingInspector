@@ -82,5 +82,23 @@ class ReplyToFreemailTests(unittest.TestCase):
                 self.assertNotIn("SENDER_REPLY_TO_FREEMAIL", self._spoofing(headers).codes)
 
 
+class ContentTests(unittest.TestCase):
+    def test_business_email_compromise_phrases(self) -> None:
+        from phishing_inspector.content_analysis import analyze_content
+
+        result = analyze_content("Pilne", "Prosze zlecic przelew na nowe konto kontrahenta.")
+        self.assertEqual(set(result.categories), {"urgency", "payment"})
+
+    def test_qr_code_needs_another_lure(self) -> None:
+        from phishing_inspector.content_analysis import analyze_content
+        from phishing_inspector.scoring import score_analysis_detailed
+
+        alone = analyze_content("Bilet", "Zeskanuj kod QR przy wejsciu.")
+        pressured = analyze_content("MFA", "Zeskanuj kod QR, aby zachowac dostep do poczty.")
+        codes = lambda c: [f.code for f in score_analysis_detailed(None, [], [], content=c)[3]]
+        self.assertNotIn("CONTENT_QR_LURE", codes(alone))
+        self.assertIn("CONTENT_QR_LURE", codes(pressured))
+
+
 if __name__ == "__main__":
     unittest.main()
