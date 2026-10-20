@@ -29,8 +29,9 @@ def test_about_dialog_follows_language_and_shows_version():
 def test_unconfirmed_links_are_hidden():
     QApplication.instance() or QApplication([])
     content = _texts(AboutDialog(language="pl"))
-    assert "Facebook" not in content
     assert "Ekosystem" not in content
+    assert "facebook.com/profile.php?id=61588740009580" in content
+    assert "youtube.com/@BlastArbiter" in content
 
 
 def test_help_menu_has_about_action():

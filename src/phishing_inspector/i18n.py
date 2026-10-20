@@ -106,6 +106,7 @@ TEXTS: dict[str, dict[str, str]] = {
         "about_link_privacy": "Polityka prywatności",
         "about_community_title": "Społeczność 3EN4ALL",
         "about_link_facebook": "Facebook",
+        "about_link_youtube": "YouTube",
         "about_support_title": "Wesprzyj rozwój",
         "about_support_text": (
             "Program jest i pozostanie bezpłatny. Jeśli chcesz, możesz "
@@ -269,6 +270,7 @@ TEXTS: dict[str, dict[str, str]] = {
         "about_link_privacy": "Privacy policy",
         "about_community_title": "3EN4ALL community",
         "about_link_facebook": "Facebook",
+        "about_link_youtube": "YouTube",
         "about_support_title": "Support development",
         "about_support_text": (
             "The program is and will stay free. If you like, you can "

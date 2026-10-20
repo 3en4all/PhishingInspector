@@ -29,7 +29,8 @@ PROJECT_LINKS = (
     ("about_link_privacy", f"{GITHUB_URL}/blob/main/PRIVACY.md"),
 )
 COMMUNITY_LINKS = (
-    ("about_link_facebook", ""),
+    ("about_link_facebook", "https://www.facebook.com/profile.php?id=61588740009580"),
+    ("about_link_youtube", "https://www.youtube.com/@BlastArbiter"),
 )
 SUPPORT_URL = "https://buycoffee.to/3en4all"
 
