@@ -110,7 +110,8 @@ class R7R1(unittest.TestCase):
     def test_branding(self):
         app = QApplication.instance() or QApplication([])
         window = MainWindow()
-        self.assertIn("Powered by TechM8", window.branding_label.text())
+        self.assertIn("3EN4ALL", window.branding_label.text())
+        self.assertNotIn("TechM8", window.branding_label.text())
         window.close()
 
 

@@ -111,7 +111,8 @@ class SenderIdentityR7R3Tests(unittest.TestCase):
         app = QApplication.instance() or QApplication([])
         window = MainWindow()
         self.assertTrue(hasattr(window, "branding_label"))
-        self.assertIn("Powered by TechM8", window.branding_label.text())
+        self.assertIn("3EN4ALL", window.branding_label.text())
+        self.assertNotIn("TechM8", window.branding_label.text())
         window.close()
 
 
