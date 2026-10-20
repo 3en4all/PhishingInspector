@@ -1,0 +1,36 @@
+[project]
+name = "phishing-inspector"
+version = "0.3.0b0"
+description = "Local phishing email inspection engine"
+requires-python = ">=3.11"
+dependencies = [
+    "PySide6>=6.6",
+    "reportlab>=4.0",
+    "tldextract>=5.1",
+    "py7zr>=0.20",
+]
+
+[project.optional-dependencies]
+msg = ["extract-msg>=0.48"]
+dns = ["dnspython>=2.4"]
+dev = ["pytest>=8", "pyinstaller>=6"]
+
+[project.scripts]
+phishing-inspector = "phishing_inspector.cli:main"
+
+[project.gui-scripts]
+phishing-inspector-gui = "phishing_inspector.gui_app:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

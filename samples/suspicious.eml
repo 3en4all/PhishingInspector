@@ -1,0 +1,33 @@
+From: Microsoft Security <support@microsoft.com>
+Reply-To: security@micros0ft-login.example
+Return-Path: <bounce@micros0ft-login.example>
+To: employee@example.org
+Subject: Immediate account verification required
+Message-ID: <123456@example.org>
+Date: Sun, 6 Sep 2026 08:00:00 +0000
+Received: from mail.micros0ft-login.example (203.0.113.50)
+    by mail.example.org with ESMTP;
+    Sun, 6 Sep 2026 08:00:05 +0000
+Authentication-Results: mail.example.org;
+    spf=fail smtp.mailfrom=micros0ft-login.example;
+    dkim=fail header.d=microsoft.com;
+    dmarc=fail header.from=microsoft.com
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="PHISHING-BOUNDARY"
+
+--PHISHING-BOUNDARY
+Content-Type: text/plain; charset="utf-8"
+
+Your account requires immediate verification.
+
+Open:
+https://203.0.113.50/login/verify?account=microsoft
+
+--PHISHING-BOUNDARY
+Content-Type: application/octet-stream
+Content-Disposition: attachment; filename="Invoice.pdf.exe"
+Content-Transfer-Encoding: base64
+
+TVqQAAMAAAAEAAAA
+
+--PHISHING-BOUNDARY--
