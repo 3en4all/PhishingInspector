@@ -67,6 +67,18 @@ All public builds are published in GitHub Releases:
 
 Feedback and bug reports are welcome. If you encounter a problem, please include the application version and a short description of what happened.
 
+## Microsoft Store
+
+A Microsoft Store (MSIX) package is in preparation. Build it with `packaging\msix\build_msix.ps1`; see `packaging/msix/STORE_LISTING.md`.
+
+## Privacy
+
+Emails are analysed locally. Only optional, user-initiated feedback (verdict, score, rule codes) is sent, with no message content or addresses. See [PRIVACY.md](PRIVACY.md).
+
+## License
+
+The Phishing Inspector core is released under the [MIT License](LICENSE). Future Pro features are distributed separately and are not covered by this license.
+
 ## About
 
 Phishing Inspector is part of the broader **3en4all / TechM8** ecosystem — projects focused on IT infrastructure, Python automation, security tooling and local AI workflows.

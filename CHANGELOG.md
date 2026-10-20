@@ -2,6 +2,11 @@
 
 ## 0.3.1-beta (unreleased)
 
+Licence and distribution
+- MIT licence for the core (LICENSE); Pro features will live in a separate repository.
+- Privacy policy (PRIVACY.md, PL + EN).
+- Microsoft Store packaging: `packaging/msix/` (one-folder build with a single exe that picks PL/EN from the Windows language, AppxManifest template, icons, `build_msix.ps1`, one-click `zbuduj_msix.cmd`) and a Store listing draft.
+
 Detection (measured on a new synthetic corpus, `tests/corpus_more.py`: 0.3.0 marked 9 of 14 typical phishing emails SAFE and raised 2 false alarms; now 20 of 20 phishing flagged, 24 of 24 legitimate SAFE)
 - Brand in a subdomain of someone else's domain scores on its own (`mbank.pl.secure-login.top`, `olx.platnosc24.pl`), URL_BRAND_SUBDOMAIN.
 - Links to a public IP address score on their own (URL_IP_HOST); local network addresses do not.
