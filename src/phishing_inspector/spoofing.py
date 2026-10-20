@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 from email.message import Message
 
 from .alignment import relaxed_align
-from .brands import brand_in_text, brand_owning
+from .brands import brand_named, brand_owning
 from .domain_analysis import analyze_domain, extract_display_name, extract_email_domain
 
 
@@ -86,16 +86,18 @@ def analyze_spoofing(message: Message) -> SpoofingAnalysis:
 
     # "mBank S.A." <alert@mbank-weryfikacja.com>: the name people read names
     # a brand, the address does not belong to it.
-    claimed = brand_in_text(display_name)
+    named = brand_named(display_name)
     claimed_brand: str | None = None
 
-    if claimed is not None:
+    if named is not None:
+        claimed, disguised = named
         claimed_brand = claimed.name
         owner = brand_owning(from_domain) if from_domain else None
 
         if owner is None or owner.key != claimed.key:
+            how = " with swapped letters" if disguised else ""
             reasons.append(
-                f"Sender name claims to be {claimed.name}, but the address domain "
+                f"Sender name claims to be {claimed.name}{how}, but the address domain "
                 f"{from_domain or '(none)'} does not belong to {claimed.name}"
             )
             codes.append("SENDER_BRAND_NAME_SPOOF")

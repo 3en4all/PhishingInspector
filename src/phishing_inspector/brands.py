@@ -200,10 +200,28 @@ def _alias_pattern(alias: str) -> re.Pattern[str]:
     return pattern
 
 
+_INVISIBLE = dict.fromkeys(map(ord, "\u200b\u200c\u200d\u2060\ufeff\u00ad"), None)
+
+
+def _disguised_forms(text: str) -> str:
+    """Undo common disguises: "PayPaI" (capital i), "Allegr0", Cyrillic letters."""
+    text = text.translate(_INVISIBLE).replace("I", "l")
+    return " ".join(skeleton(word) for word in text.split())
+
+
 def brand_in_text(text: str | None) -> Brand | None:
     """A brand named in short text such as a display name ("mBank S.A.")."""
+    found = brand_named(text)
+    return found[0] if found else None
+
+
+def brand_named(text: str | None) -> tuple[Brand, bool] | None:
+    """``(brand, disguised)``; disguised when the name only matches after
+    undoing letter swaps such as "PayPaI" or "Allegr0"."""
     if not text:
         return None
+
+    text = text.translate(_INVISIBLE)
 
     folded = _fold(text)
     upper = unicodedata.normalize("NFKD", text)
@@ -213,7 +231,14 @@ def brand_in_text(text: str | None) -> Brand | None:
         for alias in brand.aliases:
             haystack = upper if _is_short(alias) else folded
             if _alias_pattern(alias).search(haystack):
-                return brand
+                return brand, False
+
+    disguised = _disguised_forms(text)
+    if disguised != folded:
+        for brand in BRANDS:
+            for alias in brand.aliases:
+                if len(_fold(alias)) >= 5 and _alias_pattern(alias).search(disguised):
+                    return brand, True
 
     return None
 
