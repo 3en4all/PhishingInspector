@@ -61,5 +61,26 @@ class IpLinkTests(unittest.TestCase):
         self.assertNotIn("URL_IP_HOST", info.rule_codes)
 
 
+class ReplyToFreemailTests(unittest.TestCase):
+    def _spoofing(self, headers: str):
+        from email import message_from_string
+
+        from phishing_inspector.spoofing import analyze_spoofing
+
+        return analyze_spoofing(message_from_string(headers + "\n\nx"))
+
+    def test_reply_to_other_free_mailbox(self) -> None:
+        result = self._spoofing("From: Prezes <prezes.firmy@gmail.com>\n"
+                                "Reply-To: prezes@protonmail.com")
+        self.assertIn("SENDER_REPLY_TO_FREEMAIL", result.codes)
+
+    def test_reply_to_same_or_company_address(self) -> None:
+        for headers in ("From: a@gmail.com\nReply-To: b@gmail.com",
+                        "From: a@firma.pl\nReply-To: b@firma.pl",
+                        "From: lista@googlegroups.com\nReply-To: jan@firma.pl"):
+            with self.subTest(headers):
+                self.assertNotIn("SENDER_REPLY_TO_FREEMAIL", self._spoofing(headers).codes)
+
+
 if __name__ == "__main__":
     unittest.main()

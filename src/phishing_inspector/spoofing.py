@@ -5,6 +5,7 @@ from email.message import Message
 
 from .alignment import relaxed_align
 from .brands import brand_named, brand_owning
+from .domains import is_freemail, registrable_domain
 from .domain_analysis import analyze_domain, extract_display_name, extract_email_domain
 
 
@@ -58,6 +59,19 @@ def analyze_spoofing(message: Message) -> SpoofingAnalysis:
     if reply_to_mismatch:
         reasons.append(reply_to_mismatch)
         codes.append("SENDER_REPLY_TO_MISMATCH")
+
+    if (
+        reply_to_domain
+        and is_freemail(reply_to_domain)
+        and registrable_domain(reply_to_domain) != registrable_domain(from_domain or "")
+    ):
+        # Replies go to a free mailbox that is not the sender's address: the
+        # usual set-up for CEO and invoice fraud. DMARC does not cover Reply-To.
+        reasons.append(
+            f"Replies go to a free mailbox ({reply_to_domain}) instead of the "
+            f"sender's address ({from_domain or '(none)'})"
+        )
+        codes.append("SENDER_REPLY_TO_FREEMAIL")
 
     return_path_mismatch = _identity_mismatch(
         "Return-Path",

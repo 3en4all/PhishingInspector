@@ -38,6 +38,7 @@ URL_RULE_POINTS = {
 BRAND_NAME_SPOOF_POINTS = 40
 FORGED_AUTH_POINTS = 20
 MISSING_AUTH_POINTS = 10
+REPLY_TO_FREEMAIL_POINTS = 10
 PUNYCODE_SENDER_POINTS = 10
 
 
@@ -167,6 +168,10 @@ def score_analysis_detailed(
             else:
                 hit("SENDER_MISMATCH", min(30, mismatch_count * 15),
                     "Sender identity alignment mismatch detected")
+
+        if "SENDER_REPLY_TO_FREEMAIL" in codes:
+            hit("SENDER_REPLY_TO_FREEMAIL", REPLY_TO_FREEMAIL_POINTS,
+                "Replies go to a free mailbox instead of the sender's address")
 
         lookalike_count = sum(
             1 for code in codes

@@ -41,6 +41,21 @@ RISKY_TLDS = frozenset({
     "review", "trade", "party", "date", "faith", "science", "accountant",
 })
 
+# Free mailbox providers: anyone can open an address there in a minute.
+FREEMAIL_DOMAINS = frozenset({
+    "gmail.com", "googlemail.com", "outlook.com", "hotmail.com", "live.com",
+    "msn.com", "yahoo.com", "ymail.com", "icloud.com", "me.com", "aol.com",
+    "proton.me", "protonmail.com", "pm.me", "gmx.com", "gmx.net", "gmx.de",
+    "mail.com", "zoho.com", "yandex.com", "yandex.ru", "mail.ru", "tutanota.com",
+    "wp.pl", "o2.pl", "onet.pl", "op.pl", "interia.pl", "interia.eu", "poczta.fm",
+    "gazeta.pl", "tlen.pl", "vp.pl", "onet.eu", "spoko.pl", "autograf.pl",
+})
+
+
+def is_freemail(domain: str | None) -> bool:
+    return registrable_domain(domain) in FREEMAIL_DOMAINS if domain else False
+
+
 # Cyrillic and Greek letters that look like Latin ones.
 _CONFUSABLES = str.maketrans({
     "а": "a", "е": "e", "о": "o", "р": "p", "с": "c", "у": "y",
