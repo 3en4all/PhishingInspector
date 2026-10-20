@@ -32,6 +32,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from .about_dialog import AboutDialog
 from .analyzer import analyze_message
 from .i18n import explain_finding, friendly_auth_value, normalize_language, text
 from .html_report import write_html_report
@@ -595,7 +596,14 @@ class MainWindow(QMainWindow):
         )
         self.statusBar().addPermanentWidget(self.buycoffee_button, 0)
 
+        help_menu = self.menuBar().addMenu(self._t("menu_help"))
+        self.about_action = help_menu.addAction(self._t("menu_about"))
+        self.about_action.triggered.connect(self._show_about)
+
         self._apply_theme("Emerald")
+
+    def _show_about(self) -> None:
+        AboutDialog(self, self.language).exec()
 
     def _t(self, key: str, **values) -> str:
         return text(self.language, key, **values)
