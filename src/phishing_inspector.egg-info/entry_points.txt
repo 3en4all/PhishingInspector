@@ -1,0 +1,5 @@
+[console_scripts]
+phishing-inspector = phishing_inspector.cli:main
+
+[gui_scripts]
+phishing-inspector-gui = phishing_inspector.gui_app:main

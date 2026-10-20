@@ -2,6 +2,9 @@
 
 ## 0.3.1-beta (unreleased)
 
+App
+- Help → About window (PL/EN with the app language, version read from the package). Links open only on click; links to GitHub, privacy policy, website, Facebook, YouTube and buycoffee.to; a link without a confirmed address (ecosystem page) stays hidden until filled in `about_dialog.py`.
+
 Licence and distribution
 - MIT licence for the core (LICENSE); Pro features will live in a separate repository.
 - Privacy policy (PRIVACY.md, PL + EN).
