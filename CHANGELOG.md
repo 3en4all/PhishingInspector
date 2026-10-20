@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.3.1-beta (unreleased)
+
+Detection (measured on a new synthetic corpus, `tests/corpus_more.py`: 0.3.0 marked 9 of 14 typical phishing emails SAFE and raised 2 false alarms; now 20 of 20 phishing flagged, 24 of 24 legitimate SAFE)
+- Brand in a subdomain of someone else's domain scores on its own (`mbank.pl.secure-login.top`, `olx.platnosc24.pl`), URL_BRAND_SUBDOMAIN.
+- Links to a public IP address score on their own (URL_IP_HOST); local network addresses do not.
+- Disguised brand names in the sender name: "PayPaI", "Allegr0", Cyrillic letters, invisible characters.
+- Login pages hidden in CMS folders of hacked sites (`/wp-content/.../login.php`), URL_HACKED_SITE_PATH.
+- Reply-To pointing to a different free mailbox (CEO/invoice fraud), SENDER_REPLY_TO_FREEMAIL.
+- Brand in the subject when neither the sender nor the links belong to it and the text asks for login details, CONTENT_BRAND_MISMATCH.
+- QR-code phishing (CONTENT_QR_LURE) and transfer-to-new-account phrases.
+
+False alarms fixed
+- "Ing. Petr Novak" is no longer ING Bank: aliases of three letters or fewer match only in capitals.
+- PKO group companies (PKO Leasing, PKO TFI, ...) are no longer PKO impersonation.
+
 ## 0.3.0-beta
 
 Detection

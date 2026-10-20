@@ -1,7 +1,9 @@
-"""Second synthetic corpus, written independently of the rules (holdout).
+"""More synthetic cases (0.3.1): phishing techniques missing from corpus.py
+and legitimate mail shapes that easily trigger false alarms.
 
-Typical phishing techniques not covered by corpus.py, plus legitimate mail
-shapes that easily trigger false alarms. No real people's mail.
+The first batch was written before the 0.3.1 rules and showed 9 of 14
+phishing cases as SAFE and 2 false alarms. The second batch was written
+after the rules, as a fresh check. No real people's mail.
 """
 from __future__ import annotations
 
@@ -25,7 +27,7 @@ def _auth_for(domain: str) -> str:
     )
 
 
-PHISHING_HOLDOUT = [
+PHISHING_MORE = [
     Case(
         "mailbox_full_compromised_site",
         message(
@@ -177,7 +179,7 @@ PHISHING_HOLDOUT = [
 ]
 
 
-LEGITIMATE_HOLDOUT = [
+LEGITIMATE_MORE = [
     Case(
         "czech_engineer_title",
         message(
@@ -282,4 +284,36 @@ LEGITIMATE_HOLDOUT = [
         ),
         "SAFE",
     ),
+]
+
+
+def _a(domain: str) -> str:
+    return _auth_for(domain) + GMAIL_RECEIVED
+
+
+# Second batch: written after the rules, as a fresh check.
+PHISHING_MORE += [
+    Case("dhl_customs_risky_tld", message(_a("post-service.click")+'From: "Customs Service" <info@post-service.click>\nSubject: Shipment on hold: customs fee\n', html='<p>Your DHL parcel is on hold. Pay the customs fee within 24 hours.</p><a href="https://dhl-express.post-service.click/pay">Pay now</a>'),"SUSPICIOUS"),
+    Case("sharepoint_lure_onmicrosoft", message(_a("contoso-hr.onmicrosoft.com")+'From: "HR Department" <hr@contoso-hr.onmicrosoft.com>\nSubject: Salary adjustment 2026\n', html='<p>Sign in to view your salary adjustment document. Action required.</p><a href="https://contoso-hr.sharepoint.com/:b:/g/doc">View document</a>'),"SUSPICIOUS"),
+    Case("netflix_payment_display", message(_a("billing-update.net")+'From: "Netflix" <billing@billing-update.net>\nSubject: Payment failed\n', html='<p>Update your payment details.</p><a href="https://billing-update.net/nf">Update</a>'),"SUSPICIOUS"),
+    Case("vinted_short_link", message(GMAIL_RECEIVED+'From: "Vinted Support" <support@vinted-help.com>\nSubject: Odbierz platnosc\n', html='<a href="https://cutt.ly/abc">Odbierz srodki</a>'),"DANGEROUS"),
+    Case("iso_attachment", message(_a("logistics.example.net")+'From: a@logistics.example.net\nSubject: Shipping documents\n', text="See attached.", attachments=(("documents.iso","application/octet-stream",b"\x00"*64),)),"SUSPICIOUS"),
+    Case("pko_cyrillic_domain_link", message(_a("bank-alerts.net")+'From: "Bank Alerts" <alerts@bank-alerts.net>\nSubject: Logowanie z nowego urzadzenia\n', html='<a href="https://xn--pkob-j6d.pl/logowanie">Zaloguj sie</a>'),"SUSPICIOUS"),
+]
+
+LEGITIMATE_MORE += [
+    Case("wordpress_notice", message(_a("moja-strona.pl")+'From: "WordPress" <wordpress@moja-strona.pl>\nSubject: [Moja strona] Dostepna aktualizacja\n', text="Zaloguj sie do kokpitu: https://moja-strona.pl/wp-admin/update-core.php"),"SAFE"),
+    Case("teams_invite", message(_a("microsoft.com")+'From: "Microsoft Teams" <noreply@email.teams.microsoft.com>\nSubject: Jan zaprosil Cie do zespolu\n', html='<a href="https://teams.microsoft.com/l/team/abc">Otworz Microsoft Teams</a>'),"SAFE"),
+    Case("reseller_m365_offer", message(_a("it-partner.example.pl")+'From: "IT Partner" <oferty@it-partner.example.pl>\nSubject: Microsoft 365 Business - nowe ceny od listopada\n', html='<p>Zaloguj sie do panelu partnera, aby zamowic licencje. Oferta wygasa dzisiaj.</p><a href="https://panel.it-partner.example.pl/login">Panel</a>'),"SAFE"),
+    Case("invoice_saas_reply_gmail", message(_a("fakturownia.pl")+'From: "Jan Malinowski" <powiadomienia@fakturownia.pl>\nReply-To: jan.malinowski.serwis@gmail.com\nSubject: Faktura FV 12/10/2026\n', html='<p>Faktura do zaplaty w terminie 14 dni.</p><a href="https://janserwis.fakturownia.pl/invoice/abc">Pobierz fakture</a>'),"SAFE"),
+    Case("olx_real_message", message(_a("olx.pl")+'From: "OLX" <powiadomienia@olx.pl>\nSubject: Masz nowa wiadomosc\n', html='<a href="https://www.olx.pl/d/mojolx/wiadomosci">Zobacz wiadomosc</a>'),"SAFE"),
+    Case("it_printer_internal", message(_a("firma.example.pl")+'From: "Dzial IT" <it@firma.example.pl>\nSubject: Nowa drukarka\n', text="Panel drukarki: http://192.168.10.25/ - prosimy o zmiane hasla przy pierwszym logowaniu."),"SAFE"),
+    Case("event_ticket_qr", message(_a("bilety.example.pl")+'From: "Bilety" <bilety@bilety.example.pl>\nSubject: Twoj bilet na koncert\n', html='<p>Zeskanuj kod QR przy wejsciu. Do zobaczenia!</p><img src="cid:qr">'),"SAFE"),
+    Case("linkedin_jobs", message(_a("linkedin.com")+'From: "LinkedIn Job Alerts" <jobalerts-noreply@linkedin.com>\nSubject: 12 nowych ofert\n', html='<a href="https://www.linkedin.com/comm/jobs/view/123">Python Developer</a>'),"SAFE"),
+    Case("payu_confirmation", message(_a("payu.pl")+'From: "PayU" <powiadomienia@payu.pl>\nSubject: Potwierdzenie platnosci BLIK\n', html='<p>Platnosc BLIK na kwote 120,00 zl zostala zrealizowana.</p><a href="https://www.payu.pl/pomoc">Pomoc</a>'),"SAFE"),
+    Case("dpd_tracking", message(_a("dpd.com.pl")+'From: "DPD Polska" <powiadomienia@dpd.com.pl>\nSubject: Twoja paczka jest w drodze\n', html='<a href="https://tracktrace.dpd.com.pl/parcelDetails?p1=123">Sledz paczke</a>'),"SAFE"),
+    Case("gov_mobywatel", message(_a("gov.pl")+'From: "mObywatel" <powiadomienia@mobywatel.gov.pl>\nSubject: Nowy dokument w aplikacji\n', html='<a href="https://www.gov.pl/web/mobywatel">gov.pl</a>'),"SAFE"),
+    Case("friend_gmail_reply_onet", message(_a("gmail.com")+'From: "Kasia" <kasia.nowak@gmail.com>\nReply-To: kasia.nowak@onet.pl\nSubject: Zdjecia z wakacji\n', text="Hej, wysylam link do zdjec: https://photos.app.goo.gl/abc"),"SAFE"),
+    Case("company_webmail_link", message(_a("firma.example.pl")+'From: "IT" <it@firma.example.pl>\nSubject: Nowy adres poczty\n', text="Poczta przez przegladarke: https://outlook.firma.example.pl/owa/ - zaloguj sie swoim haslem."),"SAFE"),
+    Case("bank_blik_info", message(_a("mbank.pl")+'From: "mBank" <kontakt@mbank.pl>\nSubject: Nowosc: przelew na telefon BLIK\n', html='<p>Wyslij przelew na telefon przez BLIK. Zaloguj sie w aplikacji.</p><a href="https://www.mbank.pl/blik/">Wiecej</a>'),"SAFE"),
 ]

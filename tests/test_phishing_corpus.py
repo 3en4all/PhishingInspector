@@ -14,6 +14,7 @@ for path in (SRC, TESTS):
         sys.path.insert(0, str(path))
 
 from corpus import LEGITIMATE, PHISHING  # noqa: E402
+from corpus_more import LEGITIMATE_MORE, PHISHING_MORE  # noqa: E402
 from phishing_inspector.analyzer import analyze_message  # noqa: E402
 
 ORDER = {"SAFE": 0, "SUSPICIOUS": 1, "DANGEROUS": 2}
@@ -28,7 +29,7 @@ def analyze_raw(raw: str):
 
 class PhishingIsCaughtTests(unittest.TestCase):
     def test_phishing_cases(self) -> None:
-        for case in PHISHING:
+        for case in PHISHING + PHISHING_MORE:
             with self.subTest(case.name):
                 result = analyze_raw(case.raw)
                 self.assertGreaterEqual(
@@ -41,7 +42,7 @@ class PhishingIsCaughtTests(unittest.TestCase):
 
 class LegitimateStaysQuietTests(unittest.TestCase):
     def test_legitimate_cases(self) -> None:
-        for case in LEGITIMATE:
+        for case in LEGITIMATE + LEGITIMATE_MORE:
             with self.subTest(case.name):
                 result = analyze_raw(case.raw)
                 self.assertEqual(
