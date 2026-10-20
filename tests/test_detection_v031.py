@@ -100,5 +100,21 @@ class ContentTests(unittest.TestCase):
         self.assertIn("CONTENT_QR_LURE", codes(pressured))
 
 
+class HackedSitePathTests(unittest.TestCase):
+    def test_login_page_in_cms_folder(self) -> None:
+        for url in ("https://piekarnia.pl/wp-content/uploads/mail/login.php?u=1",
+                    "https://firma.pl/.well-known/office365/verify.html"):
+            with self.subTest(url):
+                self.assertIn("URL_HACKED_SITE_PATH", analyze_url(url).rule_codes)
+
+    def test_ordinary_cms_links(self) -> None:
+        for url in ("https://firma.pl/wp-content/uploads/2026/10/cennik.pdf",
+                    "https://moja-strona.pl/wp-login.php",
+                    "https://moja-strona.pl/wp-admin/update-core.php",
+                    "https://sklep.pl/images/logo.png"):
+            with self.subTest(url):
+                self.assertNotIn("URL_HACKED_SITE_PATH", analyze_url(url).rule_codes)
+
+
 if __name__ == "__main__":
     unittest.main()

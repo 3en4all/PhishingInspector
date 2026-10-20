@@ -48,6 +48,16 @@ USER_CONTENT_SUFFIXES = (
     ".trycloudflare.com", ".surge.sh", ".onmicrosoft.com",
 )
 
+# Pages inside WordPress/Joomla internal folders or .well-known. Real sites
+# link to files there (uploads/x.pdf), not to login pages. wp-admin and
+# wp-login.php are left out: WordPress itself mails those to site owners.
+_HACKED_SITE_PATH = re.compile(
+    r"/(?:wp-content|wp-includes|\.well-known|cgi-bin|images|media|tmp)/"
+    r"(?:[^?#]*/)?[^/?#]*(?:login|logon|signin|verify|update|secure|account|"
+    r"office|webmail|mailbox|auth|bank|zaloguj|logowanie|weryfik)[^/?#]*\.(?:php|html?|aspx?)$",
+    re.I,
+)
+
 SCRIPT_SCHEMES = {"javascript", "data", "vbscript"}
 
 # Kept for compatibility: the organizations treated as trusted for lure terms.
@@ -342,6 +352,13 @@ def analyze_url(
         tld = hostname.rsplit(".", 1)[-1]
         if tld in RISKY_TLDS and not trusted_domain:
             add("URL_RISKY_TLD", f"Link uses the .{tld} domain ending, often abused for phishing")
+
+    if _HACKED_SITE_PATH.search(unquote(parsed.path)):
+        add(
+            "URL_HACKED_SITE_PATH",
+            "Link opens a page hidden in a website's internal CMS folder, "
+            "a typical sign of a hacked site hosting phishing",
+        )
 
     mismatch = _text_mismatch_reason(hostname, link_text, sender_domain, sender_authenticated)
     if mismatch is not None:
