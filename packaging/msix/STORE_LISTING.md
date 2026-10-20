@@ -85,3 +85,54 @@ Po 4 dla PL i EN (interfejs w danym języku):
 4. Raport PDF otwarty obok programu.
 
 Grafika: logo 300×300 jest w `packaging\msix\Assets\StoreListing300x300.png` (tymczasowe, do podmiany na finalne).
+
+
+## 3EN4ALL — publisher attribution and project links / autor i linki
+
+**Publisher / Wydawca:** 3en4All
+**Project / Projekt:** PhishingInspector, developed as part of 3EN4ALL
+**Project page / Strona:** https://3en4all.github.io/software/phishing-inspector/
+**Main site / Strona główna:** https://3en4all.github.io/
+**Source and issues / Kod i zgłoszenia:** https://github.com/3en4all/PhishingInspector
+**Privacy / Prywatność:** https://github.com/3en4all/PhishingInspector/blob/main/PRIVACY.md
+**Facebook:** https://www.facebook.com/profile.php?id=61588740009580
+
+**Verify before publishing:** add the exact verified YouTube channel URL(s) and Buy Me a Coffee profile URL. Do not invent these addresses. Avoid presenting optional donations as a requirement for using Free.
+
+### PL — sekcja o autorze (do opisu Store)
+
+**O twórcy**
+PhishingInspector to niezależne narzędzie opracowane w ramach projektu 3EN4ALL. Powstało, aby ułatwić rozpoznawanie podejrzanych wiadomości e-mail i wyjaśniać, jakie sygnały mogą świadczyć o próbie oszustwa.
+
+Program jest bezpłatny. Nie wymaga zakładania konta. Jego rozwój i dokumentację można śledzić na oficjalnej stronie projektu oraz w serwisie GitHub.
+
+Strona projektu: https://3en4all.github.io/software/phishing-inspector/
+3EN4ALL: https://3en4all.github.io/
+GitHub / zgłaszanie błędów: https://github.com/3en4all/PhishingInspector
+Facebook: https://www.facebook.com/profile.php?id=61588740009580
+
+Analiza opiera się na wskaźnikach ryzyka i nie gwarantuje wykrycia każdej próby oszustwa. Nie zastępuje oprogramowania antywirusowego ani samodzielnej oceny bezpieczeństwa.
+
+### EN — developer section (for Store description)
+
+**About the developer**
+PhishingInspector is an independent security utility developed as part of 3EN4ALL. It helps users inspect suspicious email messages and understand the indicators that may suggest phishing.
+
+The application is free and requires no account. Follow development, documentation and issue reports on the official project website and GitHub.
+
+Project website: https://3en4all.github.io/software/phishing-inspector/
+3EN4ALL: https://3en4all.github.io/
+GitHub / report issues: https://github.com/3en4all/PhishingInspector
+Facebook: https://www.facebook.com/profile.php?id=61588740009580
+
+Detection is based on risk indicators and cannot guarantee that every malicious message will be detected. It does not replace antivirus protection or independent security judgment.
+
+### Suggested in-app About / O programie panel
+
+- PhishingInspector Free — version shown dynamically
+- Created by 3en4All / Stworzone przez 3en4All
+- Description of local email analysis and supported file formats
+- Project website, GitHub, Facebook, privacy policy
+- YouTube and Buy Me a Coffee only after exact URLs are verified
+- Free of charge; voluntary support must not affect core security features
+- Open external websites only when the user clicks the relevant link
